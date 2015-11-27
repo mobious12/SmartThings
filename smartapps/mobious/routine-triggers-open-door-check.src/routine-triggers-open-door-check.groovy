@@ -8,7 +8,7 @@ definition(
     name: "Routine Triggers Open Door Check",
     namespace: "mobious",
     author: "Glen McGowan",
-    description: "Check whether door is closed after a mode change or specific time.",
+    description: "Check for opent doors when routine executes",
     category: "Convenience",
     iconUrl: "http://cdn.device-icons.smartthings.com/Home/home2-icn.png",
     iconX2Url: "http://cdn.device-icons.smartthings.com/Home/home2-icn@2x.png"
