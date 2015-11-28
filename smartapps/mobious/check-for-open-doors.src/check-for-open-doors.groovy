@@ -65,7 +65,7 @@ def modeChangeHandler(evt) {
     }
 }
 
-def checkDoor(evt) {
+def checkDoor() {
     log.debug "Door ${door.displayName} is ${door.currentContact}"
    	if (door.currentContact == "open") {
        	def msg = "${door.displayName} was left open!"
