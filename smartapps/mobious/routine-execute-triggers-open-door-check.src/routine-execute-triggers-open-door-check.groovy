@@ -33,13 +33,13 @@ def selectActions() {
                 		input "action", "enum", title: "Select a trigger routine", options: actions
                     	}
                     section("Doors to check"){
-						input "Door", "capability.contactSensor", title: "Which Doors?", multiple: true, required: true
+						input "doors", "capability.contactSensor", title: "Which Doors?", multiple: true, required: true
     					}
-                    section("Notification"){
+                    /**section("Notification"){
         				input "sendPush", "bool",title: "Send Push Notification?", required: true
         				input "phone", "phone", title: "Phone Number (for SMS, optional)", required: false
         				input "pushAndPhone", "enum", title: "Both Push and SMS?", required: false, options: ["Yes", "No"]
-   						}    
+   						}**/    
                     
             }
     }
@@ -56,50 +56,49 @@ def updated() {
 }
 
 def initialize() {
-        subscribe(location, Door, "routineExecuted", routineChanged, checkDoor, doorCheckHandler)
+        subscribe(location, "routineExecuted", routineChanged)
     }
 
 
 def routineChanged(evt) {
-    // name will be "routineExecuted"
-    log.debug "evt name: ${evt.name}"
-
-    // value will be the ID of the SmartApp that created this event
-    log.debug "evt value: ${evt.value}"
-
-    // displayName will be the name of the routine
-    // e.g., "I'm Back!" or "Goodbye!"
-    log.debug "evt displayName: ${evt.displayName}"
-
-    // descriptionText will be the name of the routine, followed by the action
-    // e.g., "I'm Back! was executed" or "Goodbye! was executed"
-    log.debug "evt descriptionText: ${evt.descriptionText}"
-}
-
-def doorCheckHandler(evt) {
- 	log.debug "Detected Routine Complete, Executing Door Check"
-    if (evt.displayName == action) {
-    checkDoor()        
-}
+ 	if (evt.displayName == action)
+        checkDoor();
 }
 
 
 def checkDoor() {
-    log.debug "Door ${door.displayName} is ${door.currentContact}"
+	log.debug "checkDoor status: ${doors.displayName} is ${doors.currentContact}"
+    if (doors.currentContact == "closed") {
+		def message = "Door was left open"
+    	log.debug message
+        if (sendPush) {
+     		sendPush(message)
+     		}
+      }
+}
+
+
+/**Fancy Notification--Need to Fix later
+def checkDoor() {
+    log.debug "checkDoor status: ${door.displayName} is ${door.currentContact}"
    	if (door.currentContact == "open") {
-       	def msg = "${door.displayName} was left open!"
-        log.info msg
+       	log.debug "checkDoor Debug: ${door.currentContact}"
+        def msg = "${door.displayName} was left open!"
+        log.debug msg
         
          if (!phone || pushAndPhone != "No") {
-             log.debug "sending push"
+             log.debug "checkDoor: Sending push notificaton"
              sendPush(msg)
          }
          if (phone) {
-            log.debug "sending SMS"
+            log.debug "checkDoor: Sending SMS Notification"
             sendSms(phone, msg)
         
          } else {
-       	 log.debug "Door Check Complete: No Open Doors"
-    }
+       	 log.debug "checkDoor Complete: No Open Doors Detected"
+         } 
+	} else {
+    log.debug "checkDoor Error: Unable to detect contact states"
 }
 }
+**/
