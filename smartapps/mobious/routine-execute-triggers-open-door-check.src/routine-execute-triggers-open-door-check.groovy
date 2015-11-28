@@ -81,12 +81,10 @@ def checkDoor() {
         if (sendPush) {
      		sendPush(message)
      		}
-      }
-    if (doors.currentContact == "closed") {
+      }else {
     log.info "Security Check Successful: No open doors detected." 
-	}else {
-    log.info "Error: Unable to detect contact status."
-    }
+	}
+    
  }
 
 
