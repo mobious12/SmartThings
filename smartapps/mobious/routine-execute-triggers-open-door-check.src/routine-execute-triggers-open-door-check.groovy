@@ -33,13 +33,16 @@ def selectActions() {
                 		input "action", "enum", title: "Select a trigger routine", options: actions
                     	}
                     section("Doors to check"){
-						input "doors", "capability.contactSensor", title: "Which Door?", multiple: false, required: true
+						input "doors", "capability.contactSensor", title: "Which Door?", multiple: true, required: true
     					}
-                    /**section("Notification"){
+                    
+                    /** Will fix this section later...
+                    section("Notification"){
         				input "sendPush", "bool",title: "Send Push Notification?", required: true
         				input "phone", "phone", title: "Phone Number (for SMS, optional)", required: false
         				input "pushAndPhone", "enum", title: "Both Push and SMS?", required: false, options: ["Yes", "No"]
-   						}**/    
+   						}
+                        **/    
                     
             }
     }
@@ -65,10 +68,34 @@ def routineChanged(evt) {
         checkDoor();
 }
 
+def checkDoor() {
+	//Find all the doors that are open.
+    def open = doors.findAll { it?.latestValue("contact") == "open" }
+    //Group all the open doors in a list, insert "is" or "Are" if the list contains more than one entry.
+    def list = open.size() > 1 ? "are" : "is"
+    if (open) {
+    	//format the list and push it.
+		def message = "Secuirty Check Failed: ${open.join(', ')} ${list} open"
+    	log.info message
+        //Hard code push notification for now. 
+        if (sendPush) {
+     		sendPush(message)
+     		}
+      }
+    if (doors.currentContact == "closed") {
+    log.info "Security Check Successful: No open doors detected." 
+	}else {
+    log.info "Error: Unable to detect contact status."
+    }
+ }
+
+
+
+/** Single Door Check
 
 def checkDoor() {
     if (doors.currentContact == "open") {
-		def message = "Security Check Failed: ${doors.displayName} was left open."
+		def message = ""Security Check Failed: ${door.displayName} is open." 
     	log.info message
         if (sendPush) {
      		sendPush(message)
@@ -81,6 +108,8 @@ def checkDoor() {
     log.info "Error: Unable to detect contact status."
     }
  }
+ 
+ **/
 
 
 
