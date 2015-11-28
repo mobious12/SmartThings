@@ -33,7 +33,7 @@ def selectActions() {
                 		input "action", "enum", title: "Select a trigger routine", options: actions
                     	}
                     section("Doors to check"){
-						input "doors", "capability.contactSensor", title: "Which Doors?", multiple: true, required: true
+						input "doors", "capability.contactSensor", title: "Which Door?", multiple: false, required: true
     					}
                     /**section("Notification"){
         				input "sendPush", "bool",title: "Send Push Notification?", required: true
@@ -67,15 +67,22 @@ def routineChanged(evt) {
 
 
 def checkDoor() {
-	log.debug "checkDoor status: ${doors.displayName} is ${doors.currentContact}"
-    if (doors.currentContact == "closed") {
-		def message = "Door was left open"
-    	log.debug message
+    if (doors.currentContact == "open") {
+		def message = "Security Check Failed: ${doors.displayName} was left open."
+    	log.info message
         if (sendPush) {
      		sendPush(message)
+            log.info Push Notification Sent
      		}
       }
-}
+    if (doors.currentContact == "closed") {
+    log.info "Security Check Successful: No open doors detected." 
+	}else {
+    log.info "Error: Unable to detect contact status."
+    }
+ }
+
+
 
 
 /**Fancy Notification--Need to Fix later
