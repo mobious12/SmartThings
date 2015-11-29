@@ -10,8 +10,10 @@ definition(
     author: "John M. Daly",
     description: "Flashes a set of lights in response to motion, an open/close event, a switch, or at set times.",
     category: "Convenience",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/light_motion-outlet-contact.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/light_motion-outlet-contact@2x.png"
+    iconUrl: "http://cdn.device-icons.smartthings.com/Lighting/light11-icn.png",
+    iconX2Url: "http://cdn.device-icons.smartthings.com/Lighting/light11-icn@2x.png"
+    
+
 )
 
 preferences {
