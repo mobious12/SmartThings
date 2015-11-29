@@ -38,7 +38,8 @@ preferences {
         input "sendPushMessage", "enum", title: "Send a push notification?", metadata:[values:["Yes","No"]], required:false
         input "phone1", "phone", title: "Send a Text Message?", required: false
     }
-	/**section("Control this switch:") {
+	/** broken? Todo: Need to fix.
+    section("Control this switch:") {
 		input "switch1", "capability.switch", required: false
 	}**/
 }
@@ -59,7 +60,7 @@ def humidityHandler(evt) {
 	def currentHumidity = Double.parseDouble(evt.value.replace("%", ""))
 	def tooHumid = humidity1 
     def notHumidEnough = humidity2
-	//def mySwitch = settings.switch1
+	//def mySwitch = settings.switch1 Broken/TODO Need to fix
 	def deltaMinutes = 10 
     
     def timeAgo = new Date(now() - (1000 * 60 * deltaMinutes).toLong())
