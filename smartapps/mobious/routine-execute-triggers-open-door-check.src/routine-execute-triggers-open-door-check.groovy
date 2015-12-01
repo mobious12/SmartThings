@@ -93,6 +93,7 @@ def checkDoor() {
      		}
       }else {
     log.info "Security Check Successful: No open doors detected." 
+    sendNotificationEvent("Security Check Successful: No open doors detected.")
 	}
     
  }
